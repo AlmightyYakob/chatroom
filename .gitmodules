@@ -1,3 +1,0 @@
-[submodule "cryptography"]
-	path = cryptography
-	url = git@github.com:AlmightyYakob/cryptography.git
