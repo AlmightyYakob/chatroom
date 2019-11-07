@@ -15,13 +15,9 @@ def inefficient_generator(upper_bound):
     is_generator = False
     while is_generator == False:
       g = randint(2, upper_bound -1) #pick a random number to test, dont include 1
-
-      print(type(g), type(q), type(upper_bound))
-
       if(pow(g, 2, upper_bound) != 1 and pow(g, q, upper_bound)!= 1):
         is_generator = True
-    
-    print("Generator: ", g)
+
 
     return g
 
@@ -38,11 +34,9 @@ def generate_keys(key_length: int):
     while not is_prime(p):
         p = randint(lower, upper) | 1
     
-
+    g = inefficient_generator(p) #get the generator
     a = randint(1, p - 1) #this is the secret key
-    print(a)
+    b = pow(g,a,p)
+    print("A: ", a, "B: ", b, "G: ", g)
 
-
-generate_keys(5)
-
-inefficient_generator(7)
+generate_keys(7)
