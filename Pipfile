@@ -12,6 +12,7 @@ flake8-black = "*"
 flask = "*"
 Flask-SocketIO = "*"
 python-socketio = "*"
+pycrypto = "*"
 crypto = {git = "https://github.com/AlmightyYakob/cryptography.git", editable = true, ref = "master"}
 
 [requires]
