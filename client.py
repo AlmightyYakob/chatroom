@@ -1,37 +1,5 @@
-import os
-import sys
-import socketio
-
-from elgamel import generate_keys, encrypt_message, decrypt_message
-from utils import param_prompt
-
-# sio = socketio.AsyncClient()
-sio = socketio.Client()
-
-SERVER_HOST = os.getenv("SERVER_HOST")
-SERVER_PORT = os.getenv("SERVER_PORT")
-ip = sys.argv[1] if len(sys.argv) > 1 else f"http://{SERVER_HOST}:{SERVER_PORT}"
-
-p_bit_length, secret_key = param_prompt()
-p, g, b, a = generate_keys(p_bit_length)
-server_pubkeys = None
-
-sio.connect(ip)
-sio.emit("public_keys", data={"p": p, "g": g, "b": b})
+from messaging import MessagingClient
 
 
-@sio.on("public_keys")
-def handle(data):
-    global server_pubkeys
-    server_pubkeys = (data["p"], data["g"], data["b"])
-
-
-@sio.on("message")
-def print_messag(data):
-    print("server:", decrypt_message(data, a, p))
-
-
-while True:
-    text = input()
-    encrypted = encrypt_message(text, pubkeys=server_pubkeys)
-    sio.emit("message", data=encrypted)
+client = MessagingClient()
+client.start()
