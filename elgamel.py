@@ -1,8 +1,12 @@
 from random import randint
-from crypto.a2.rsa import is_prime
+from crypto.a2.rsa import is_prime, pulverizer
+
+# from Crypto.Cipher import AES
+
+from typing import Iterable
 
 
-def inefficient_generator(p):
+def generator(p):
     """
     fast way to do a generator
     let p = 2q + 1 where q = (p-1) / 2
@@ -34,8 +38,35 @@ def generate_keys(key_length: int):
     while not is_prime(p):
         p = randint(lower, upper) | 1
 
-    g = inefficient_generator(p)  # get the generator
-    a = randint(1, p - 1)  # this is the secret key
+    g = generator(p)
+    a = randint(1, p - 1)  # a is secret
     b = pow(g, a, p)
 
     return (p, g, b, a)
+
+
+def encrypt_message(msg: str, pubkeys: Iterable[int]) -> Iterable[Iterable[int]]:
+    p, g, b = pubkeys
+    encrypted = []
+
+    for char in msg:
+        beta = randint(1, p - 1)
+        half_mask = pow(g, beta, p)
+        full_mask = pow(b, beta, p)
+
+        cipher = ord(char) * full_mask % p
+
+        encrypted.append((cipher, half_mask))
+
+    return encrypted
+
+
+def decrypt_message(msg: Iterable[Iterable[int]], a: float, p: float) -> str:
+    decrypted = []
+
+    for cipher, half_mask in msg:
+        _, _, temp = pulverizer(p, pow(half_mask, a, p))
+        x = cipher * temp % p
+        decrypted.append(chr(x))
+
+    return "".join(decrypted)
