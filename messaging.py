@@ -47,7 +47,7 @@ class MessagingServer(Messager):
         self.sio.on_event("message", self.print_message)
 
     def start_server(self):
-        self.sio.run(self.app, host=self.host, port=self.port)
+        self.sio.run(self.app, host="0.0.0.0", port=self.port)
 
     def return_pubkeys(self, data):
         self.set_pubkeys(data)
