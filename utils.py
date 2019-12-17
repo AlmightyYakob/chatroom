@@ -20,6 +20,16 @@ def get_flask_instance() -> SocketIO:
     return app
 
 
+def bit_length_prompt() -> int:
+    p_bit_length = int(input("Choose p bit-length: "))
+    return p_bit_length
+
+
+def secret_key_prompt() -> str:
+    secret_key = input("Specify secret key: ")
+    return secret_key
+
+
 def param_prompt() -> Tuple:
     p_bit_length = int(input("Choose p bit-length: "))
     secret_key = input("Specify secret key: ")
